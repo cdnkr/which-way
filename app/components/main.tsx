@@ -35,7 +35,8 @@ export default function Main() {
       <div className="">
         <h1 className="text-2xl font-bold uppercase">Which Way</h1>
         <p className="text-gray-400 text-base leading-tight">
-          See which direction a place is from your location.
+          Select a place, and see which direction it is from your current
+          location.
         </p>
         {!hasDeviceOrientationSupport && (
           <div className="mt-2">
