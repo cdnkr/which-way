@@ -38,14 +38,16 @@ const InstallButton = () => {
     return (
         <>
             {isInstallable && (
-                <div className="absolute bottom-0 left-0 w-full p-4 border-t border-gray-700">
-                    <button
-                        onClick={handleInstallClick}
-                        className="px-2 py-4 rounded-md w-full cursor-pointer flex items-center justify-center gap-2 bg-blue leading-none text-center"
-                    >
-                        <Download className="size-4" />
-                        Install
-                    </button>
+                <div className="absolute bottom-0 left-0 w-full">
+                    <div className="max-w-screen-sm mx-auto py-4 border-t border-gray-700">
+                        <button
+                            onClick={handleInstallClick}
+                            className="px-2 py-4 rounded-md w-full cursor-pointer flex items-center justify-center gap-2 bg-blue leading-none text-center"
+                        >
+                            <Download className="size-4" />
+                            Install
+                        </button>
+                    </div>
                 </div>
             )}
         </>
