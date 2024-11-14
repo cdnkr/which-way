@@ -10,6 +10,7 @@ Select a location, and see which direction it is from your current location.
 2. Add your API keys to the `.env` file.
 
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`: The Google Maps API is used on the Google Places Autocomplete component.
+- `NEXT_PUBLIC_NOAA_API_KEY`: The NOAA API is used to get magnetic declination. Get your key [here](https://www.ngdc.noaa.gov/geomag/CalcSurvey.shtml). Complete the usage survey and you'll be provided with an API key.
 
 3. Navigate to [http://localhost:3000](http://localhost:3000).
 
