@@ -2,7 +2,7 @@
 
 Select a location, and see which direction it is from your current location.
 
-![screenshot](./public/screenshots/1.jpeg)
+![screenshot](./public/screenshots/3.png)
 
 ## Getting started
 
