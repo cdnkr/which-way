@@ -15,4 +15,4 @@ Select a location, and see which direction it is from your current location.
 
 ### Setting Up a Development SSL Certificate for Local testing
 
-See: [Setting Up a Development SSL Certificate for Local testing in Next.js 15](https://gist.github.com/cdnkr/7e56cfb86f255877df99f0d7a2d57d34.js)
+See: [Setting Up a Development SSL Certificate for Local testing in Next.js 15](https://gist.github.com/cdnkr/7e56cfb86f255877df99f0d7a2d57d34)
