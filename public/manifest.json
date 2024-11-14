@@ -1,6 +1,6 @@
 {
-    "name": "Which Way",
-    "short_name": "Which Way",
+    "name": "WhichWay",
+    "short_name": "WhichWay",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#111111",
