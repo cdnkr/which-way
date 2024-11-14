@@ -16,3 +16,7 @@ Select a location, and see which direction it is from your current location.
 ### Setting Up a Development SSL Certificate for Local testing
 
 See: [Setting Up a Development SSL Certificate for Local testing in Next.js 15](https://gist.github.com/cdnkr/7e56cfb86f255877df99f0d7a2d57d34)
+
+### Setting up a PWA in Next.js 15
+
+See: [Setting up a PWA in Next.js 15](https://gist.github.com/cdnkr/25d3746bdb35767d66c7ae6d26c2ed98)
