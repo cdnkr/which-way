@@ -3,25 +3,26 @@
 import useDeviceOrientation from '@/app/hooks/use-device-orientation'
 import useGeolocation from '@/app/hooks/use-geolocation'
 import { Compass as CompassIcon } from 'lucide-react'
+import { useState } from 'react'
 import Compass from './compass'
 import GooglePlacesAutocomplete, {
   GooglePlace,
 } from './google-places-autocomplete'
-import { useState } from 'react'
 
 export default function Main() {
+  const {
+    permission: geolocationPermission,
+    position,
+    requestPermission: requestGeolocationPermission,
+  } = useGeolocation()
   const {
     permission: compassPermission,
     direction,
     setDirection,
     hasSupport: hasDeviceOrientationSupport,
     requestPermission: requestCompassPermission,
-  } = useDeviceOrientation()
-  const {
-    permission: geolocationPermission,
-    position,
-    requestPermission: requestGeolocationPermission,
-  } = useGeolocation()
+    magneticDeclination,
+  } = useDeviceOrientation({ userPosition: position })
 
   const [place, setPlace] = useState<GooglePlace | null>(null)
 
@@ -75,6 +76,7 @@ export default function Main() {
             setDirection={setDirection}
             hasDeviceOrientationSupport={hasDeviceOrientationSupport}
             toPlace={place}
+            magneticDeclination={magneticDeclination}
           />
         </div>
       )}

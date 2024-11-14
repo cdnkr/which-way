@@ -9,7 +9,7 @@ import { useState } from 'react'
 function KeyValueItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="w-full flex flex-row gap-2">
-      <span className="text-gray-400">{label}</span>
+      <span className="text-gray-400 uppercase">{label}</span>
       <span>{value}</span>
     </div>
   )
@@ -25,6 +25,7 @@ interface Props {
   ) => void
   hasDeviceOrientationSupport: boolean
   toPlace: GooglePlace | null
+  magneticDeclination: number
 }
 
 export default function Compass({
@@ -33,6 +34,7 @@ export default function Compass({
   setDirection,
   hasDeviceOrientationSupport,
   toPlace,
+  magneticDeclination,
 }: Props) {
   const [showNorth, setShowNorth] = useState(false)
 
@@ -94,15 +96,13 @@ export default function Compass({
     const y = -scaledRadius * Math.cos(angleInRadians)
 
     return (
-      <>
-        <ArrowBigUpDash
-          className={`absolute size-20 text-blue fill-blue z-1 transition-opacity duration-300 ${isWithinRange() ? 'opacity-100' : 'opacity-75'}`}
-          style={{
-            transform: `translate(${x}px, ${y}px) rotate(${angleInRadians * (180 / Math.PI)}deg)`,
-          }}
-          strokeWidth={1}
-        />
-      </>
+      <ArrowBigUpDash
+        className={`absolute size-20 text-blue fill-blue z-1 transition-opacity duration-300 ${isWithinRange() ? 'opacity-100' : 'opacity-75'}`}
+        style={{
+          transform: `translate(${x}px, ${y}px) rotate(${angleInRadians * (180 / Math.PI)}deg)`,
+        }}
+        strokeWidth={1}
+      />
     )
   }
 
@@ -156,6 +156,14 @@ export default function Compass({
               />
             </div>
           )}
+          {(typeof magneticDeclination === 'number') && (
+            <div className="flex justify-center">
+              <KeyValueItem
+                label="Declination"
+                value={`${magneticDeclination.toFixed(2)}°`}
+              />
+            </div>
+          )}
         </div>
         {position && toPlace && renderPlaceOnCompass()}
         {showNorth && renderNorthOnCompass()}
@@ -166,7 +174,9 @@ export default function Compass({
           checked={showNorth}
           onCheckedChange={setShowNorth}
         />
-        <label htmlFor="show-north">Show North</label>
+        <label htmlFor="show-north" className="text-sm uppercase">
+          Show North
+        </label>
       </div>
     </div>
   )

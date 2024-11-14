@@ -1,15 +1,30 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getCardinalDirection } from '../utils/geo'
 
-export default function useDeviceOrientation() {
+export async function getMagneticDeclination(latitude: number, longitude: number) {
+  const response = await fetch(`https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1=${latitude}&lon1=${longitude}&key=${process.env.NEXT_PUBLIC_NOAA_API_KEY}&resultFormat=json`)
+  const data = await response.json()
+
+  if (!data?.result || data?.result?.length === 0) return 0
+
+  const declination = data.result[0].declination
+  return declination
+}
+
+export default function useDeviceOrientation({
+  userPosition,
+}: {
+  userPosition: GeolocationPosition | null
+}) {
   const [permission, setPermission] = useState('unknown')
   const [direction, setDirection] = useState<{
     degrees: number
     cardinal: string
   } | null>(null)
   const [hasSupport, setHasSupport] = useState(true)
+  const magneticDeclinationRef = useRef(0)
 
   // Function to check device orientation support
   const checkSupport = () => {
@@ -47,8 +62,10 @@ export default function useDeviceOrientation() {
     if (heading !== undefined) {
       let cardinalDirection = getCardinalDirection(heading)
 
+      const adjustedHeading = ((heading + magneticDeclinationRef.current) + 360) % 360
+
       setDirection({
-        degrees: Math.round(heading),
+        degrees: Math.round(adjustedHeading),
         cardinal: cardinalDirection,
       })
     }
@@ -82,6 +99,16 @@ export default function useDeviceOrientation() {
     }
   }
 
+  useEffect(() => {
+    if (!userPosition || magneticDeclinationRef.current !== 0) return
+
+    getMagneticDeclination(userPosition.coords.latitude, userPosition.coords.longitude).then(
+      (declination) => {
+        magneticDeclinationRef.current = declination
+      },
+    )
+  }, [userPosition])
+
   // Cleanup
   useEffect(() => {
     return () => {
@@ -99,5 +126,6 @@ export default function useDeviceOrientation() {
     setDirection,
     requestPermission,
     hasSupport,
+    magneticDeclination: magneticDeclinationRef.current,
   }
 }
