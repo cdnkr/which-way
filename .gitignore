@@ -42,3 +42,7 @@ certificates
 # package managers
 package-lock.json
 pnpm-lock.yaml
+
+# pwa
+/public/sw.js
+/public/workbox-*.js

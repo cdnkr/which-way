@@ -8,6 +8,7 @@ import Compass from './compass'
 import GooglePlacesAutocomplete, {
   GooglePlace,
 } from './google-places-autocomplete'
+import InstallButton from './install-pwa'
 
 export default function Main() {
   const {
@@ -33,7 +34,7 @@ export default function Main() {
 
   return (
     <div className="p-4 max-w-screen-sm mx-auto w-full space-y-4">
-      <div className="">
+      <div>
         <h1 className="text-2xl font-bold uppercase">Which Way</h1>
         <p className="text-gray-400 text-base leading-tight">
           Select a place, and see which direction it is from your current
@@ -80,6 +81,7 @@ export default function Main() {
           />
         </div>
       )}
+      <InstallButton />
     </div>
   )
 }
