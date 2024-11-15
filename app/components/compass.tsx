@@ -156,7 +156,7 @@ export default function Compass({
               />
             </div>
           )}
-          {(typeof magneticDeclination === 'number') && (
+          {typeof magneticDeclination === 'number' && (
             <div className="flex justify-center">
               <KeyValueItem
                 label="Declination"

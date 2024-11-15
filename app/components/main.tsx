@@ -37,7 +37,7 @@ export default function Main() {
   }
 
   return (
-    <div className='md:pt-8'>
+    <div className="md:pt-8">
       <div className="pt-4 pb-4 pl-4 pr-4 md:pt-4 md:pb-12 md:pl-8 md:pr-8 max-w-screen-sm mx-auto w-full space-y-4 bg-[#111111] rounded-lg">
         <div>
           <div className="flex justify-center items-center gap-4">

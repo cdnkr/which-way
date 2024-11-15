@@ -3,8 +3,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { getCardinalDirection } from '../utils/geo'
 
-export async function getMagneticDeclination(latitude: number, longitude: number) {
-  const response = await fetch(`https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1=${latitude}&lon1=${longitude}&key=${process.env.NEXT_PUBLIC_NOAA_API_KEY}&resultFormat=json`)
+export async function getMagneticDeclination(
+  latitude: number,
+  longitude: number,
+) {
+  const response = await fetch(
+    `https://www.ngdc.noaa.gov/geomag-web/calculators/calculateDeclination?lat1=${latitude}&lon1=${longitude}&key=${process.env.NEXT_PUBLIC_NOAA_API_KEY}&resultFormat=json`,
+  )
   const data = await response.json()
 
   if (!data?.result || data?.result?.length === 0) return 0
@@ -51,9 +56,9 @@ export default function useDeviceOrientation({
     // If we have enough readings, check if they're too stable (stuck) or too jumpy
     if (lastAlphaValues.current.length === 10) {
       const allSame = lastAlphaValues.current.every(
-        (val) => Math.abs(val - lastAlphaValues.current[0]) < 0.1
+        (val) => Math.abs(val - lastAlphaValues.current[0]) < 0.1,
       )
-      
+
       const tooJumpy = lastAlphaValues.current.some((val, i) => {
         if (i === 0) return false
         const diff = Math.abs(val - lastAlphaValues.current[i - 1])
@@ -88,7 +93,8 @@ export default function useDeviceOrientation({
     if (heading !== undefined) {
       let cardinalDirection = getCardinalDirection(heading)
 
-      const adjustedHeading = ((heading + magneticDeclinationRef.current) + 360) % 360
+      const adjustedHeading =
+        (heading + magneticDeclinationRef.current + 360) % 360
 
       setDirection({
         degrees: Math.round(adjustedHeading),
@@ -128,11 +134,12 @@ export default function useDeviceOrientation({
   useEffect(() => {
     if (!userPosition || magneticDeclinationRef.current !== 0) return
 
-    getMagneticDeclination(userPosition.coords.latitude, userPosition.coords.longitude).then(
-      (declination) => {
-        magneticDeclinationRef.current = declination
-      },
-    )
+    getMagneticDeclination(
+      userPosition.coords.latitude,
+      userPosition.coords.longitude,
+    ).then((declination) => {
+      magneticDeclinationRef.current = declination
+    })
   }, [userPosition])
 
   // Cleanup
