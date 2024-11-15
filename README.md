@@ -1,4 +1,4 @@
-## Which Way
+## WhichWay
 
 Select a location, and see which direction it is from your current location.
 
