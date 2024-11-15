@@ -25,6 +25,8 @@ export default function useDeviceOrientation({
   } | null>(null)
   const [hasSupport, setHasSupport] = useState(true)
   const magneticDeclinationRef = useRef(0)
+  const [needsCalibration, setNeedsCalibration] = useState(false)
+  const lastAlphaValues = useRef<number[]>([])
 
   // Function to check device orientation support
   const checkSupport = () => {
@@ -39,6 +41,29 @@ export default function useDeviceOrientation({
     return true
   }
 
+  const checkCalibrationNeeded = (alpha: number) => {
+    // Keep last 10 readings
+    lastAlphaValues.current.push(alpha)
+    if (lastAlphaValues.current.length > 10) {
+      lastAlphaValues.current.shift()
+    }
+
+    // If we have enough readings, check if they're too stable (stuck) or too jumpy
+    if (lastAlphaValues.current.length === 10) {
+      const allSame = lastAlphaValues.current.every(
+        (val) => Math.abs(val - lastAlphaValues.current[0]) < 0.1
+      )
+      
+      const tooJumpy = lastAlphaValues.current.some((val, i) => {
+        if (i === 0) return false
+        const diff = Math.abs(val - lastAlphaValues.current[i - 1])
+        return diff > 40 && diff < 320 // Ignore differences near 360/0 boundary
+      })
+
+      setNeedsCalibration(allSame || tooJumpy)
+    }
+  }
+
   // Function to handle device motion/orientation data
   const handleOrientation = (event) => {
     let heading = 0
@@ -47,13 +72,14 @@ export default function useDeviceOrientation({
     // For iOS devices
     if (event?.webkitCompassHeading) {
       heading = event.webkitCompassHeading
+      setNeedsCalibration(false) // iOS handles calibration internally
     }
     // For Android devices
     else if (event.alpha !== null) {
-      // Convert alpha angle to compass heading
-      // Alpha starts at 0° pointing North and increases clockwise
-      // Compass heading starts at 0° pointing North and increases clockwise
-      heading = 360 - event.alpha
+      checkCalibrationNeeded(event.alpha)
+      // On Android, we need to handle the screen orientation
+      const screenOrientation = window.screen.orientation?.angle || 0
+      heading = (360 - event.alpha + screenOrientation) % 360
     } else {
       setHasSupport(false)
       setDirection({ degrees: 0, cardinal: 'N' })
@@ -116,10 +142,6 @@ export default function useDeviceOrientation({
     }
   }, [])
 
-  useEffect(() => {
-    console.log({ hasSupport })
-  }, [hasSupport])
-
   return {
     permission,
     direction,
@@ -127,5 +149,7 @@ export default function useDeviceOrientation({
     requestPermission,
     hasSupport,
     magneticDeclination: magneticDeclinationRef.current,
+    needsCalibration,
+    setNeedsCalibration,
   }
 }
